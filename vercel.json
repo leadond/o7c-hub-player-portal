@@ -1,14 +1,9 @@
 {
-  "buildCommand": "npm run build:player-portal",
-  "outputDirectory": "packages/player-portal/dist",
-  "devCommand": "npm run dev:player-portal",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": null,
-  "functions": {
-    "api/**/*.js": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
@@ -54,10 +49,5 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    }
-  ]
+
 }
