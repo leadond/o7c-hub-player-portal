@@ -1,0 +1,50 @@
+{
+  "name": "o7c-hub-player-portal",
+  "version": "1.0.0",
+  "description": "Player Portal application for players and parents",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "clean": "find . -type f -name '._*' -delete",
+    "predev": "npm run clean",
+    "prebuild": "npm run clean",
+    "vercel-build": "npm run build"
+  },
+  "dependencies": {
+
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.2.0",
+    "framer-motion": "^12.4.7",
+    "recharts": "^2.15.1",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.475.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.1.0",
+    "vitest": "^3.2.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.18"
+  },
+  "keywords": [
+    "o7c",
+    "player-portal",
+    "players",
+    "parents",
+    "react",
+    "vite"
+  ],
+  "author": "O7C Hub Team",
+  "license": "MIT"
+}

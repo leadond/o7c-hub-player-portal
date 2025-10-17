@@ -1,0 +1,61 @@
+{
+  "name": "@o7c/shared",
+  "version": "1.0.0",
+  "description": "Shared components and utilities for O7C Hub ecosystem",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "find . -type f -name '._*' -delete",
+    "prebuild": "npm run clean",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "firebase": "^12.4.0",
+    "firebase-admin": "^12.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "axios": "^1.12.2",
+    "zod": "^3.24.2",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.475.0",
+    "framer-motion": "^12.4.7",
+    "sonner": "^2.0.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-babel": "^6.0.4",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.3.3",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "eslint": "^9.19.0",
+    "vitest": "^3.2.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/jest-dom": "^6.9.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "keywords": [
+    "o7c",
+    "shared",
+    "components",
+    "utilities",
+    "firebase",
+    "react"
+  ],
+  "author": "O7C Hub Team",
+  "license": "MIT"
+}
