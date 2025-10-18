@@ -15,7 +15,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@o7c/shared': path.resolve(__dirname, '../shared/src')
+      '@o7c/shared': path.resolve(__dirname, './shared')
     }
   },
   optimizeDeps: {
