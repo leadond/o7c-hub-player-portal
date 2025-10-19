@@ -126,6 +126,34 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     }
   };
 
+  // Show configuration error if Firebase is not available
+  if (!auth && typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-50">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
+          <div className="text-center">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Configuration Error
+            </h1>
+            <p className="text-gray-600 mb-6">
+              Firebase environment variables are not configured. Please contact your administrator.
+            </p>
+            <div className="bg-red-50 border border-red-200 rounded-md p-4 text-left">
+              <h3 className="text-sm font-medium text-red-800 mb-2">Missing Configuration:</h3>
+              <ul className="text-xs text-red-700 space-y-1">
+                <li>• VITE_FIREBASE_API_KEY</li>
+                <li>• VITE_FIREBASE_AUTH_DOMAIN</li>
+                <li>• VITE_FIREBASE_PROJECT_ID</li>
+                <li>• And other Firebase variables</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Show login form if not authenticated
   if (!user) {
     return (

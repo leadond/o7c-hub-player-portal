@@ -54,18 +54,23 @@ if (isFirebaseConfigured) {
     analytics = null;
   }
 } else {
-  console.warn('Firebase not configured. Running in development mode with mock authentication.');
+  console.warn('Firebase not configured. Environment variables missing.');
   
-  // Create mock Firebase objects for development
-  auth = {
-    currentUser: null,
-    onAuthStateChanged: (callback) => {
-      // Simulate no user initially
-      callback(null);
-      return () => {}; // unsubscribe function
-    }
-  };
+  // In production, we should not use mock objects - this indicates a configuration error
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    console.error('PRODUCTION ERROR: Firebase environment variables are not configured!');
+    console.error('Please set the following environment variables in Vercel:');
+    console.error('- VITE_FIREBASE_API_KEY');
+    console.error('- VITE_FIREBASE_AUTH_DOMAIN');
+    console.error('- VITE_FIREBASE_PROJECT_ID');
+    console.error('- VITE_FIREBASE_STORAGE_BUCKET');
+    console.error('- VITE_FIREBASE_MESSAGING_SENDER_ID');
+    console.error('- VITE_FIREBASE_APP_ID');
+    console.error('- VITE_FIREBASE_MEASUREMENT_ID');
+  }
   
+  // Set to null to indicate Firebase is not available
+  auth = null;
   db = null;
   storage = null;
   analytics = null;

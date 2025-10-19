@@ -86,6 +86,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // If Firebase auth is not available, show error and set loading to false
     if (!auth) {
       console.error('Firebase auth not available. Please check your Firebase configuration.');
+      
+      // In production, this is a critical error
+      if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+        console.error('CRITICAL: Firebase is not configured in production!');
+      }
+      
       setLoading(false);
       return;
     }
