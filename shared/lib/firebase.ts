@@ -19,7 +19,9 @@ const firebaseConfig = {
 // Check if Firebase config is properly set
 const isFirebaseConfigured = firebaseConfig.apiKey && 
   firebaseConfig.apiKey !== 'demo-api-key' && 
-  !firebaseConfig.apiKey.includes('your_actual');
+  !firebaseConfig.apiKey.includes('your_actual') &&
+  firebaseConfig.projectId && 
+  firebaseConfig.projectId !== 'demo-project';
 
 let app, auth, db, storage, analytics;
 
@@ -52,8 +54,18 @@ if (isFirebaseConfigured) {
     analytics = null;
   }
 } else {
-  console.warn('Firebase not configured. Using mock objects for development.');
-  auth = null;
+  console.warn('Firebase not configured. Running in development mode with mock authentication.');
+  
+  // Create mock Firebase objects for development
+  auth = {
+    currentUser: null,
+    onAuthStateChanged: (callback) => {
+      // Simulate no user initially
+      callback(null);
+      return () => {}; // unsubscribe function
+    }
+  };
+  
   db = null;
   storage = null;
   analytics = null;

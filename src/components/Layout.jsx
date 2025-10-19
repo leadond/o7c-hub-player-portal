@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@o7c/shared';
 import { Button } from '@o7c/shared';
-import { Menu, X, User, Calendar, MessageSquare, Trophy, Home, Users } from 'lucide-react';
+import { getUrl } from '@o7c/shared/utils/envConfig';
+import { Menu, User, Calendar, MessageSquare, Trophy, Home, Users } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, userData, logout } = useAuth();
+  const { userData, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -91,7 +92,7 @@ const Layout = ({ children }) => {
             </div>
             {userData?.role === 'parent' && (
               <Button
-                onClick={() => window.location.href = 'http://localhost:3000'}
+                onClick={() => window.location.href = getUrl('o7cHubUrl')}
                 variant="outline"
                 className="w-full mb-2"
               >

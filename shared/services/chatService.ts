@@ -23,6 +23,7 @@ import {
   deleteObject,
 } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
+import { handleApiError, ERROR_TYPES } from '../utils/errorHandler';
 import type {
   ChatMessage,
   ChatRoom,
@@ -49,59 +50,69 @@ export class ChatService {
     createdBy: string,
     metadata?: ChatRoom['metadata']
   ): Promise<string> {
-    const roomData = {
-      name,
-      type,
-      participants: participants.map(userId => ({
-        userId,
-        joinedAt: serverTimestamp(),
-        isOnline: false,
-      })),
-      createdAt: serverTimestamp(),
-      createdBy,
-      lastActivity: serverTimestamp(),
-      isActive: true,
-      metadata: metadata || {},
-    };
+    try {
+      const roomData = {
+        name,
+        type,
+        participants: participants.map(userId => ({
+          userId,
+          joinedAt: serverTimestamp(),
+          isOnline: false,
+        })),
+        createdAt: serverTimestamp(),
+        createdBy,
+        lastActivity: serverTimestamp(),
+        isActive: true,
+        metadata: metadata || {},
+      };
 
-    const docRef = await addDoc(collection(db, 'chatRooms'), roomData);
-    return docRef.id;
+      const docRef = await addDoc(collection(db, 'chatRooms'), roomData);
+      return docRef.id;
+    } catch (error) {
+      throw handleApiError(error, { operation: 'createRoom', context: 'ChatService' });
+    }
   }
 
   async joinRoom(roomId: string, userId: string, userName: string, role: string): Promise<void> {
-    const roomRef = doc(db, 'chatRooms', roomId);
-    const roomSnap = await getDoc(roomRef);
+    try {
+      const roomRef = doc(db, 'chatRooms', roomId);
+      const roomSnap = await getDoc(roomRef);
 
-    if (!roomSnap.exists()) {
-      throw new Error('Room not found');
-    }
+      if (!roomSnap.exists()) {
+        const error = new Error('Room not found');
+        (error as any).status = 404;
+        throw error;
+      }
 
-    const roomData = roomSnap.data();
-    const participantIndex = roomData.participants.findIndex((p: any) => p.userId === userId);
+      const roomData = roomSnap.data();
+      const participantIndex = roomData.participants.findIndex((p: any) => p.userId === userId);
 
-    if (participantIndex === -1) {
-      // Add new participant
-      roomData.participants.push({
-        userId,
-        userName,
-        role,
-        joinedAt: serverTimestamp(),
-        isOnline: true,
-        lastSeen: serverTimestamp(),
+      if (participantIndex === -1) {
+        // Add new participant
+        roomData.participants.push({
+          userId,
+          userName,
+          role,
+          joinedAt: serverTimestamp(),
+          isOnline: true,
+          lastSeen: serverTimestamp(),
+        });
+      } else {
+        // Update existing participant
+        roomData.participants[participantIndex].isOnline = true;
+        roomData.participants[participantIndex].lastSeen = serverTimestamp();
+      }
+
+      await updateDoc(roomRef, {
+        participants: roomData.participants,
+        lastActivity: serverTimestamp(),
       });
-    } else {
-      // Update existing participant
-      roomData.participants[participantIndex].isOnline = true;
-      roomData.participants[participantIndex].lastSeen = serverTimestamp();
+
+      // Update user presence
+      await this.updatePresence(userId, true, roomId);
+    } catch (error) {
+      throw handleApiError(error, { operation: 'joinRoom', roomId, context: 'ChatService' });
     }
-
-    await updateDoc(roomRef, {
-      participants: roomData.participants,
-      lastActivity: serverTimestamp(),
-    });
-
-    // Update user presence
-    await this.updatePresence(userId, true, roomId);
   }
 
   async leaveRoom(roomId: string, userId: string): Promise<void> {

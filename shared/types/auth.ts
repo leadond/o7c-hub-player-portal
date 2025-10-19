@@ -24,5 +24,6 @@ export interface AuthContextType {
   userDataLoading: boolean;
   isAuthorized: boolean;
   login: (email: string, password: string) => Promise<{ user: User; userData: UserData | null }>;
+  signup: (email: string, password: string, firstName: string, lastName: string, role?: 'player' | 'parent') => Promise<{ user: User; userData: UserData | null }>;
   logout: () => Promise<void>;
 }

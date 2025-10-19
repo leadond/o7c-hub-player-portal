@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { filter as filterUsers, update as updateUser } from '../api/entities/AppUser';
 import { shouldRedirectUser, getRedirectUrl } from '../utils/routing';
@@ -142,6 +142,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signup = async (email: string, password: string, firstName: string, lastName: string, role: 'player' | 'parent' = 'player') => {
+    if (!auth) {
+      throw new Error('Firebase authentication is not available. Please check your Firebase configuration.');
+    }
+    
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      if (user) {
+        // Update display name
+        await updateProfile(user, {
+          displayName: `${firstName} ${lastName}`
+        });
+        
+        // Create user data record (you'll need to implement this API call)
+        const newUserData = {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          role: role,
+          firebaseUid: user.uid
+        };
+        
+        // In a real app, you'd save this to your database
+        setUserData(newUserData as any);
+        
+        return { user, userData: newUserData };
+      }
+      return { user: null, userData: null };
+    } catch (error) {
+      console.error('Firebase signup error:', error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     if (!auth) {
       console.warn('Firebase auth not available. Clearing mock session.');
@@ -166,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     userDataLoading,
     isAuthorized,
     login,
+    signup,
     logout,
   };
 

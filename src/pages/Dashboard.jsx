@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@o7c/shared';
 import { useAuth } from '@o7c/shared';
 import { User, Trophy, Calendar, MessageSquare, TrendingUp, Award } from 'lucide-react';
@@ -120,14 +121,14 @@ const Dashboard = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <a
+              <Link
                 key={index}
-                href={action.href}
+                to={action.href}
                 className="flex flex-col items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <action.icon className="h-8 w-8 text-blue-600 mb-2" />
                 <span className="text-sm font-medium text-center">{action.title}</span>
-              </a>
+              </Link>
             ))}
           </div>
         </CardContent>

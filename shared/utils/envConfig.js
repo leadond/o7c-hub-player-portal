@@ -25,6 +25,13 @@ const ENV_CONFIG = {
     serverSide: 'BREVO_API_KEY',
     required: false,
     description: 'Brevo API key for email services'
+  },
+  o7cHubUrl: {
+    clientSide: 'VITE_O7C_HUB_URL',
+    serverSide: 'O7C_HUB_URL',
+    required: false,
+    description: 'O7C Hub application URL for switching between portals',
+    fallback: 'http://localhost:3000'
   }
 };
 
@@ -75,9 +82,9 @@ export function getEnvVariable(service, isServerSide = false) {
   if (!config) {
     throw new Error(`Unknown service configuration: ${service}`);
   }
-  
+
   let value = null;
-  
+
   if (isServerSide && config.serverSide) {
     // Server-side: try server variable first, then client as fallback
     value = process.env[config.serverSide] || process.env[config.clientSide];
@@ -85,8 +92,35 @@ export function getEnvVariable(service, isServerSide = false) {
     // Client-side: only use client variables
     value = import.meta.env[config.clientSide];
   }
-  
+
   return value || null;
+}
+
+/**
+ * Gets URL with environment-based configuration and fallback handling
+ * @param {string} service - The service configuration key (must be a URL type)
+ * @param {boolean} isServerSide - Whether running on server side
+ * @returns {string} - The URL with fallback to localhost for development
+ */
+export function getUrl(service, isServerSide = false) {
+  const config = ENV_CONFIG[service];
+  if (!config) {
+    throw new Error(`Unknown service configuration: ${service}`);
+  }
+
+  // Get the environment variable value
+  let url = null;
+
+  if (isServerSide && config.serverSide) {
+    // Server-side: try server variable first, then client as fallback
+    url = process.env[config.serverSide] || process.env[config.clientSide];
+  } else if (config.clientSide) {
+    // Client-side: only use client variables
+    url = import.meta.env[config.clientSide];
+  }
+
+  // Return environment URL if available, otherwise use fallback
+  return url || config.fallback || 'http://localhost:3000';
 }
 
 /**
@@ -239,6 +273,7 @@ export function getEnvSetupGuide() {
 export default {
   validateTokenFormat,
   getEnvVariable,
+  getUrl,
   validateEnvConfig,
   validateAllEnvConfig,
   getEnvSetupGuide,
