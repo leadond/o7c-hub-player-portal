@@ -13,7 +13,7 @@ export const APP_CONFIGS: Record<string, AppConfig> = {
   'o7c-hub': {
     name: 'O7C Hub',
     url: process.env.NODE_ENV === 'production'
-      ? 'https://o7c-hub.vercel.app'
+      ? 'https://o7c-hub-vercel-app.vercel.app'
       : 'http://localhost:3000',
     allowedRoles: ['admin', 'coach'],
     defaultRoute: '/'
@@ -21,7 +21,7 @@ export const APP_CONFIGS: Record<string, AppConfig> = {
   'player-portal': {
     name: 'Player Portal',
     url: process.env.NODE_ENV === 'production'
-      ? 'https://player-portal.vercel.app'
+      ? 'https://o7c-hub-player-portal-l9khcw4px-derrick-ls-projects.vercel.app'
       : 'http://localhost:3001',
     allowedRoles: ['player', 'parent'],
     defaultRoute: '/'

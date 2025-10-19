@@ -43,8 +43,8 @@ export class AuthRedirectService {
     }
 
     const baseUrl = appKey === 'o7c-hub'
-      ? (process.env.NODE_ENV === 'production' ? 'https://o7c-hub.vercel.app' : 'http://localhost:3000')
-      : (process.env.NODE_ENV === 'production' ? 'https://player-portal.vercel.app' : 'http://localhost:3001');
+      ? (process.env.NODE_ENV === 'production' ? 'https://o7c-hub-vercel-app.vercel.app' : 'http://localhost:3000')
+      : (process.env.NODE_ENV === 'production' ? 'https://o7c-hub-player-portal-l9khcw4px-derrick-ls-projects.vercel.app' : 'http://localhost:3001');
 
     this.performRedirect(baseUrl, options);
   }
@@ -104,8 +104,8 @@ export class AuthRedirectService {
    */
   getAppUrl(appKey: 'o7c-hub' | 'player-portal'): string {
     return appKey === 'o7c-hub'
-      ? (process.env.NODE_ENV === 'production' ? 'https://o7c-hub.vercel.app' : 'http://localhost:3000')
-      : (process.env.NODE_ENV === 'production' ? 'https://player-portal.vercel.app' : 'http://localhost:3001');
+      ? (process.env.NODE_ENV === 'production' ? 'https://o7c-hub-vercel-app.vercel.app' : 'http://localhost:3000')
+      : (process.env.NODE_ENV === 'production' ? 'https://o7c-hub-player-portal-l9khcw4px-derrick-ls-projects.vercel.app' : 'http://localhost:3001');
   }
 }
 

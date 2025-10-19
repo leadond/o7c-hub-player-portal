@@ -33,16 +33,16 @@ export const checkAppAccess = (userRole: UserRole): SecurityCheckResult => {
 export const getRedirectUrlForRole = (userRole: UserRole): string => {
   if (['admin', 'coach'].includes(userRole)) {
     return process.env.NODE_ENV === 'production'
-      ? 'https://o7c-hub.vercel.app'
+      ? 'https://o7c-hub-vercel-app.vercel.app'
       : 'http://localhost:3000';
   }
   if (['player', 'parent'].includes(userRole)) {
     return process.env.NODE_ENV === 'production'
-      ? 'https://player-portal.vercel.app'
+      ? 'https://o7c-hub-player-portal-l9khcw4px-derrick-ls-projects.vercel.app'
       : 'http://localhost:3001';
   }
   return process.env.NODE_ENV === 'production'
-    ? 'https://player-portal.vercel.app'
+    ? 'https://o7c-hub-player-portal-l9khcw4px-derrick-ls-projects.vercel.app'
     : 'http://localhost:3001';
 };
 
